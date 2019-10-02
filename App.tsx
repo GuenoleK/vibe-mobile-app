@@ -1,7 +1,10 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { MainNavigator } from './navigation/navigation';
-import { Provider as PaperProvider, Appbar, DefaultTheme } from 'react-native-paper';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
+import { initializeTranslation } from './translation/translation-initializer';
+
+initializeTranslation('en');
 
 const App = createAppContainer(MainNavigator);
 
