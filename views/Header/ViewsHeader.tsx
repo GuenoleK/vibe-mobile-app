@@ -1,15 +1,9 @@
 import React from 'react';
 import { Appbar } from 'react-native-paper';
 import { NavigationActions } from 'react-navigation';
-import { NavigationStackProp } from 'react-navigation-stack';
-import { NavigationRoute } from 'react-navigation';
-import { NavigationParams } from 'react-navigation';
+import { INavigationProps } from '../../common/INavigationProps';
 
-interface IViewsHeader {
-    navigation: NavigationStackProp<NavigationRoute<NavigationParams>, any>
-}
-
-export class ViewsHeader extends React.Component<IViewsHeader> {
+export class ViewsHeader extends React.Component<INavigationProps> {
     render() {
         return (
             <Appbar.Header>

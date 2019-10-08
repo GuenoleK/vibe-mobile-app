@@ -9,10 +9,9 @@ import { articleApi } from './article-api';
 import { ArticleMediaTypeCodeEnum } from '../enums/ArticleMediaTypeCodeEnum';
 import { translationUtil } from '../translation/translation-util';
 import { AsyncStorage } from 'react-native';
+import { apiUtil } from '../utils/ApiUtil';
 
 type IArticleMedia = ArticleMediaInterface.IArticleMedia;
-
-export const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 const apiURl = 'api/article-media';
 
 class ArticleMediaApi {
@@ -23,10 +22,8 @@ class ArticleMediaApi {
     let error;
     let headers = {};
 
-    if (userStore.hasCookie) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
-    } else if (userStore.hasSession) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
+    if (userStore.isConnected()) {
+      headers = { Authorization: 'Bearer ' + await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY) };
     }
 
     try {

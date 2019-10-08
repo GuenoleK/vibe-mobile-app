@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { observable } from "mobx";
 import { userStore } from "../../../stores/user-store";
 import { headerStore } from "../../../stores/header-store";
 import { translationUtil } from "../../../translation/translation-util";
 import { loginApi } from "../../../api/login-api";
+import { observable, toJS } from "mobx";
+import { observer } from "mobx-react";
 
+@observer
 export class LoginScreen extends React.Component<{ navigation: any }> {
   @observable
   isLoading = false;
@@ -30,30 +32,38 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView behavior="padding" style={styles.form}>
           <Text>{translationUtil.translate("home.form.title")}</Text>
           <TextInput
             label={translationUtil.translate(
               "home.fields.username.placeholder"
             )}
-            onChangeText={text => this.setState({ text })}
+            onChangeText={this.handleChange("login")}
             mode="outlined"
-            onChange={this.handleChange("login")}
             ref={this.createRef("usernameTextField")}
             style={styles.text}
+            value={userStore.user.login}
+            onSubmitEditing={() => this.selectInput("passwordTextField")}
+            blurOnSubmit={false}
+            autoCapitalize="none"
+            returnKeyType="next"
+            textContentType="username"
           />
           <TextInput
             label={translationUtil.translate(
               "home.fields.password.placeholder"
             )}
-            onChangeText={text => this.setState({ text })}
+            onChangeText={this.handleChange("password")}
             mode="outlined"
-            onChange={this.handleChange("password")}
-            ref={this.createRef("usernameTextField")}
+            ref={this.createRef("passwordTextField")}
             style={styles.text}
+            textContentType="password"
+            value={userStore.user.password}
+            secureTextEntry
+            autoCapitalize="none"
           />
-          <Button mode="contained" onPress={() => navigate("Login")}>
-            Login
+          <Button mode="contained" onPress={this.login}>
+            {translationUtil.translate("home.buttons.login")}
           </Button>
         </KeyboardAvoidingView>
       </View>
@@ -64,17 +74,13 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
     this[name] = target;
   };
 
-  handleChange = (name: "login" | "password") => event => {
-    userStore.user[name] =
-      name === "login"
-        ? event.target.value.toLowerCase().trim()
-        : event.target.value.trim();
-  };
+  selectInput(name: string) {
+    this[name].focus();
+  }
 
-  fireLoginOnEnterKey = event => {
-    if (event.key === "Enter") {
-      this.login();
-    }
+  handleChange = (name: "login" | "password") => value => {
+    userStore.user[name] =
+      name === "login" ? value.toLowerCase().trim() : value.trim();
   };
 
   /**
@@ -87,7 +93,9 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
       .authenticate()
       .then(() => {
         // window.location.reload();
-        console.log("DO SOMETHING");
+        userStore.isConnected().then(isConnected => {
+          userStore.isUserConnected = isConnected
+        });
       })
       .catch(() => {
         this.isLoading = false;
@@ -99,6 +107,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  form: {
+    flexDirection: "column",
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center"
   },

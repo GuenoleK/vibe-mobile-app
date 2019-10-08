@@ -1,58 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { observable } from 'mobx';
+import { observer } from 'mobx-react';
 import { userStore } from '../../stores/user-store';
-import { userApi } from '../../api/user-apix';
-import { roleAPi } from '../../api/role-api';
-import { initializeTranslation } from '../../translation/translation-initializer';
-import { headerStore } from '../../stores/header-store';
+import { View, StyleSheet } from 'react-native';
+import { ArticleListScreen } from '../Article/ArticleList/ArticleList';
+import { LoginScreen } from './Login/Login';
+import { INavigationProps } from '../../common/INavigationProps';
 
-export class HomeScreen extends React.Component<{ navigation: any }> {
-
-    // Component life cycle
-    componentWillMount() {
-        userStore.clearUser();
-        headerStore.headerTitle = 'Vibe';
-    }
-
-    /**
-     * Here we initialize the data for everywhere
-     */
-    async componentDidMount() {
-        userStore.user = await userStore.initUserStore();
-        if (userStore.user && userStore.user.id) {
-            userStore.extendedUser = await userApi.getExtendedUser(userStore.user.id);
-            userStore.userRole = await roleAPi.getRoleByUserAndStructure(userStore.user.id, userStore.extendedUser.currentStructure.id);
-            if (userStore.user.langKey) {
-                initializeTranslation(userStore.user.langKey);
-            }
-        } else {
-            initializeTranslation();
-        }
-    }
+@observer
+export class HomeScreen extends React.Component<INavigationProps> {
     render() {
-        const { navigate } = this.props.navigation;
-        return (
+        return(
             <View style={styles.container}>
-                <Text>Hello!</Text>
-                <Text>This is the home screen{'\n'}</Text>
-                <Button
-                    mode="contained"
-                    // onPress={() => navigate('Profile', { name: 'Jane' })}>
-                    onPress={() => navigate('Login')}>
-                    Login
-                </Button>
+                {userStore.isUserConnected ?
+                    <ArticleListScreen navigation={this.props.navigation} />
+                    : <LoginScreen navigation={this.props.navigation} />
+                }
             </View>
-        );
-
+        )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: '100%'
+  }
 });

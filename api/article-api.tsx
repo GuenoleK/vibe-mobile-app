@@ -9,8 +9,6 @@ import { AsyncStorage } from 'react-native';
 
 type IArticle = ArticleInterface.IArticle;
 
-export const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
-
 class ArticleApi {
   /**
    * Authenticate the user
@@ -19,10 +17,8 @@ class ArticleApi {
     let error;
     let headers = {};
 
-    if (userStore.hasCookie) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
-    } else if (userStore.hasSession) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
+    if (userStore.isConnected()) {
+      headers = { Authorization: 'Bearer ' + await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY) };
     }
 
     try {
@@ -51,10 +47,8 @@ class ArticleApi {
     let error;
     let headers = {};
 
-    if (userStore.hasCookie) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
-    } else if (userStore.hasSession) {
-      headers = { Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) };
+    if (userStore.isConnected()) {
+      headers = { Authorization: 'Bearer ' + await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY) };
     }
 
     try {

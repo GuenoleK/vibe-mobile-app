@@ -1,10 +1,11 @@
-import * as UserInterface from '../model/user.model';
-import * as ExtendedUserInterface from '../model/extended-user.model';
-import * as RoleInterface from '../model/role.model';
-import { computed, observable } from 'mobx';
-import { AUTH_TOKEN_KEY, loginApi } from '../api/login-api';
-import { AsyncStorage } from 'react-native';
-import { LanguageEnum } from '../enums/LanguageEnum';
+import * as UserInterface from "../model/user.model";
+import * as ExtendedUserInterface from "../model/extended-user.model";
+import * as RoleInterface from "../model/role.model";
+import { computed, observable, action, toJS } from "mobx";
+import { loginApi } from "../api/login-api";
+import { AsyncStorage } from "react-native";
+import { LanguageEnum } from "../enums/LanguageEnum";
+import { apiUtil } from "../utils/ApiUtil";
 
 type IUser = UserInterface.IUser;
 type IExtendedUser = ExtendedUserInterface.IExtendedUser;
@@ -13,6 +14,9 @@ type IRole = RoleInterface.IRole;
 class UserStore {
   @observable
   private innerUserRole: IRole = {};
+
+  @observable
+  isUserConnected;
 
   @computed
   get userRole(): IRole {
@@ -47,26 +51,24 @@ class UserStore {
     this.innerUser = { ...this.innerUser, ...user };
   }
 
-  get hasCookie() {
-    return AsyncStorage.getItem(AUTH_TOKEN_KEY) !== undefined;
-  }
-
-  get hasSession() {
-    return AsyncStorage.getItem(AUTH_TOKEN_KEY) !== undefined;
-  }
-
-  get isConnected() {
-    return this.hasCookie || this.hasSession;
+  async isConnected() {
+    return await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY) ? true : false;
   }
 
   async initUserStore() {
-    if (this.hasCookie) {
-      return loginApi.getAccountWithHeaderToken({ Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) });
-    } else if (this.hasSession) {
-      return loginApi.getAccountWithHeaderToken({ Authorization: 'Bearer ' + AsyncStorage.getItem(AUTH_TOKEN_KEY) });
+    let user;
+    if (await this.isConnected()) {
+      user = await loginApi.getAccountWithHeaderToken({
+        Authorization:
+          "Bearer " + (await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY))
+      });
     }
+    this.isUserConnected = await this.isConnected();
+    console.log('INIT2', toJS(this.isUserConnected), await this.isConnected());
+    return user;
   }
 
+  @action
   clearUser() {
     this.innerUser = {};
   }

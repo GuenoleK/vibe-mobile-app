@@ -1,13 +1,6 @@
-import React from 'react';
-import { userStore } from '../stores/user-store';
-import axios from 'axios';
-import { snackbarStore } from '../stores/snackbar-store';
-import { SnackbarTypeEnum } from '../enums/SnackbarEnum';
-import { translationUtil } from '../translation/translation-util';
+import axios from "axios";
 
-export const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
-
-const apiUrl = 'api/account';
+const apiUrl = "api/account";
 const apiResetPassword = `${apiUrl}/reset-password`;
 
 class PasswordManagementApi {
@@ -15,7 +8,7 @@ class PasswordManagementApi {
   public requestResetPassword = (email: string) => {
     return axios.post(`${apiResetPassword}/init`, email.trim(), {
       headers: {
-        'Content-Type': 'text/plain'
+        "Content-Type": "text/plain"
       }
     });
   };
@@ -27,7 +20,10 @@ class PasswordManagementApi {
 
   // tslint:disable-next-line: ter-arrow-body-style
   public changePassword = (currentPassword: string, newPassword: string) => {
-    return axios.post(`${apiUrl}/change-password`, { currentPassword, newPassword });
+    return axios.post(`${apiUrl}/change-password`, {
+      currentPassword,
+      newPassword
+    });
   };
 }
 

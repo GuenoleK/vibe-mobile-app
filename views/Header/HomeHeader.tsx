@@ -1,13 +1,12 @@
 import React from 'react';
 import { Appbar } from 'react-native-paper';
-import { NavigationRoute, NavigationParams } from 'react-navigation';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { AsyncStorage } from 'react-native';
+import { userStore } from '../../stores/user-store';
+import { observer } from 'mobx-react';
+import { INavigationProps } from '../../common/INavigationProps';
 
-interface IHomeHeaderProps {
-    navigation: NavigationStackProp<NavigationRoute<NavigationParams>, any>
-}
-
-export class HomeHeader extends React.Component<IHomeHeaderProps> {
+@observer
+export class HomeHeader extends React.Component<INavigationProps> {
     render() {
         return (
             <Appbar.Header>
@@ -15,9 +14,19 @@ export class HomeHeader extends React.Component<IHomeHeaderProps> {
                     title="Vibe"
                 />
                 <Appbar.Action icon="search" onPress={this._onSearch} />
-                <Appbar.Action icon="more-vert" onPress={this._onMore} />
+                {userStore.isUserConnected && <Appbar.Action icon="fingerprint" onPress={this.disconnect} />}
             </Appbar.Header>
         );
+    }
+
+    async disconnect() {
+        AsyncStorage.clear().then(() => {
+            userStore.clearUser();
+            userStore.isConnected().then(isConnected => {
+                userStore.isUserConnected = isConnected
+                console.log(isConnected);
+            })
+        })
     }
 
     _onSearch = () => console.log('Searching');

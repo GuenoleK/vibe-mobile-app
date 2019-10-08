@@ -1,14 +1,22 @@
-import { userStore } from 'app/stores/user-store';
-import { Storage } from 'react-jhipster';
-import { AUTH_TOKEN_KEY } from 'app/api/register-api';
+import { AsyncStorage } from "react-native";
 
 class ApiUtil {
-  getHeader() {
-    if (userStore.hasCookie) {
-      return { Authorization: 'Bearer ' + Storage.session.get(AUTH_TOKEN_KEY) };
-    } else if (userStore.hasSession) {
-      return { Authorization: 'Bearer ' + Storage.local.get(AUTH_TOKEN_KEY) };
+  AUTH_TOKEN_KEY = "jhi-authenticationToken";
+
+  baseUrl = this.getBaseUrl();
+
+  private getBaseUrl() {
+    if (process.env.NODE_ENV === "development") {
+      return "http://192.168.0.33:8080/api";
     }
+    return "https://epem-vibe.herokuapp.com/api";
+  }
+
+  async getHeader() {
+    return {
+      Authorization:
+        "Bearer " + (await AsyncStorage.getItem(this.AUTH_TOKEN_KEY))
+    };
   }
 }
 
