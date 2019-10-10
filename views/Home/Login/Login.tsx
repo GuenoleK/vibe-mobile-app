@@ -1,12 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { Button, TextInput, DarkTheme, DefaultTheme } from "react-native-paper";
 import { userStore } from "../../../stores/user-store";
 import { headerStore } from "../../../stores/header-store";
 import { translationUtil } from "../../../translation/translation-util";
 import { loginApi } from "../../../api/login-api";
 import { observable, toJS } from "mobx";
 import { observer } from "mobx-react";
+import { loginStyle } from "./login-style";
+import { themeStore } from "../../../stores/theme-store";
 
 @observer
 export class LoginScreen extends React.Component<{ navigation: any }> {
@@ -31,9 +33,11 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={styles.container}>
-        <KeyboardAvoidingView behavior="padding" style={styles.form}>
-          <Text>{translationUtil.translate("home.form.title")}</Text>
+      <View style={loginStyle.container}>
+        <KeyboardAvoidingView behavior="padding" style={loginStyle.form}>
+          <Text style={this.titleStyle.title}>
+            {translationUtil.translate("home.form.title")}
+          </Text>
           <TextInput
             label={translationUtil.translate(
               "home.fields.username.placeholder"
@@ -41,7 +45,7 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
             onChangeText={this.handleChange("login")}
             mode="outlined"
             ref={this.createRef("usernameTextField")}
-            style={styles.text}
+            style={loginStyle.text}
             value={userStore.user.login}
             onSubmitEditing={() => this.selectInput("passwordTextField")}
             blurOnSubmit={false}
@@ -56,18 +60,46 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
             onChangeText={this.handleChange("password")}
             mode="outlined"
             ref={this.createRef("passwordTextField")}
-            style={styles.text}
+            style={loginStyle.text}
             textContentType="password"
             value={userStore.user.password}
             secureTextEntry
             autoCapitalize="none"
           />
-          <Button mode="contained" onPress={this.login}>
-            {translationUtil.translate("home.buttons.login")}
-          </Button>
+          <View style={loginStyle.buttons}>
+            <Button
+              style={loginStyle.loginRegisterButton}
+              mode="contained"
+              onPress={this.login}
+            >
+              {translationUtil.translate("home.buttons.login")}
+            </Button>
+            <Button
+              style={loginStyle.loginRegisterButton}
+              mode="text"
+              onPress={() => console.log("Hello")}
+            >
+              {translationUtil.translate("home.buttons.register")}
+            </Button>
+          </View>
         </KeyboardAvoidingView>
       </View>
     );
+  }
+
+  get titleStyle() {
+    return StyleSheet.create({
+      title: {
+        fontSize: 32,
+        marginBottom: 32,
+        fontWeight: "bold",
+        width: "100%",
+        textAlign: "center",
+        color: themeStore.isDark
+          ? DarkTheme.colors.text
+          : DefaultTheme.colors.text
+      }
+    });
   }
 
   createRef = name => target => {
@@ -94,7 +126,7 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
       .then(() => {
         // window.location.reload();
         userStore.isConnected().then(isConnected => {
-          userStore.isUserConnected = isConnected
+          userStore.isUserConnected = isConnected;
         });
       })
       .catch(() => {
@@ -102,24 +134,3 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
       });
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  form: {
-    flexDirection: "column",
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  text: {
-    height: 60,
-    width: "75%",
-    marginBottom: 15
-  }
-});

@@ -19,7 +19,6 @@ export class ProfileScreen extends React.Component<{navigation: any}> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },

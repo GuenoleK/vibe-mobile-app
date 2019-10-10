@@ -64,7 +64,6 @@ class UserStore {
       });
     }
     this.isUserConnected = await this.isConnected();
-    console.log('INIT2', toJS(this.isUserConnected), await this.isConnected());
     return user;
   }
 

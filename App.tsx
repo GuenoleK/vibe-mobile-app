@@ -1,17 +1,24 @@
 import React from "react";
 import { createAppContainer } from "react-navigation";
 import { MainNavigator } from "./navigation/navigation";
-import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
+import {
+  Provider as PaperProvider,
+  DefaultTheme,
+  DarkTheme
+} from "react-native-paper";
 import { initializeTranslation } from "./translation/translation-initializer";
 import { userStore } from "./stores/user-store";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
+import { themeStore } from "./stores/theme-store";
+import { AsyncStorage } from "react-native";
+import { StorageKeysEnum } from "./enums/StorageKeysEnum";
+import { observable, computed } from "mobx";
 
 initializeTranslation("en");
 
 const App = createAppContainer(MainNavigator);
 
-const theme = {
+const lightTheme = {
   ...DefaultTheme,
   roundness: 4,
   colors: {
@@ -20,18 +27,39 @@ const theme = {
   }
 };
 
+const darkTheme = {
+  ...DarkTheme,
+  roundness: 4,
+  colors: {
+    ...DarkTheme.colors,
+    primary: "#3f51b5",
+    text: "#fff"
+  }
+};
+
 @observer
 class Layout extends React.Component {
+
   async componentDidMount() {
     await userStore.initUserStore();
+    if (await AsyncStorage.getItem(StorageKeysEnum.IS_THEME_DARK) === "true" || themeStore.isDark) {
+      themeStore.isDark = true;
+    } else {
+      themeStore.isDark = false;
+    }
   }
 
   render() {
     return (
-      <PaperProvider theme={theme}>
+      <PaperProvider theme={this.theme}>
         <App />
       </PaperProvider>
     );
+  }
+
+  @computed
+  get theme() {
+    return themeStore.isDark ? darkTheme : lightTheme;
   }
 }
 

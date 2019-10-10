@@ -6,6 +6,9 @@ class HeaderStore {
 
   @observable
   headerTitle: string;
+
+  @observable
+  isDarkModeActivated: boolean;
 }
 
 export const headerStore = new HeaderStore();
