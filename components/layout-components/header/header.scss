@@ -1,0 +1,40 @@
+[data-component='vibe-header'] {
+  .title-description-zone {
+    cursor: default;
+    user-select: none;
+    width: 100%;
+  }
+
+  @media (max-width: 520px) {
+    .title-description-zone {
+      overflow: hidden;
+      .header-title,
+      .header-description {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .header-description {
+    font-size: 0.9rem;
+  }
+
+  [data-component='search-bar'] {
+    margin-right: auto;
+    margin-left: auto;
+    transition: background-color 0.5s;
+    border-radius: 20px;
+  }
+
+  .header-account-icon,
+  .header-language-icon {
+    color: white;
+    font-size: 30px;
+  }
+}

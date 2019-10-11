@@ -1,23 +1,24 @@
 import React from 'react';
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 import { AsyncStorage } from 'react-native';
 import { userStore } from '../../stores/user-store';
 import { observer } from 'mobx-react';
 import { INavigationProps } from '../../common/INavigationProps';
 import { themeStore } from '../../stores/theme-store';
 import { StorageKeysEnum } from '../../enums/StorageKeysEnum';
+import { headerStore } from '../../stores/header-store';
 
 @observer
-export class HomeHeader extends React.Component<INavigationProps> {
+export class Header extends React.Component<INavigationProps> {
     render() {
         return (
             <Appbar.Header>
                 <Appbar.Content
-                    title="Vibe"
+                    title={headerStore.headerTitle}
                 />
                 {userStore.isUserConnected && <Appbar.Action icon="search" onPress={this._onSearch} />}
-                {userStore.isUserConnected && <Appbar.Action icon="power-settings-new" onPress={this.disconnect} />}
                 <Appbar.Action icon={this.switchThemeIcon} onPress={this.switchTheme} />
+                {userStore.isUserConnected && <Appbar.Action icon="power-settings-new" onPress={this.disconnect} />}
             </Appbar.Header>
         );
     }

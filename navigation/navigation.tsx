@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "react-navigation-stack";
 import { ProfileScreen } from "../views/Profile/Profile";
-import { HomeHeader } from "../views/Header/HomeHeader";
+import { Header } from "../views/Header/Header";
 import { ViewsHeader } from "../views/Header/ViewsHeader";
 import { LoginScreen } from "../views/Home/Login/Login";
 import { headerStore } from "../stores/header-store";
@@ -13,7 +13,7 @@ export const MainNavigator = createStackNavigator(
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
         title: headerStore.headerTitle,
-        header: <HomeHeader navigation={navigation} />
+        header: <Header navigation={navigation} />
       })
     },
     Login: { screen: LoginScreen },

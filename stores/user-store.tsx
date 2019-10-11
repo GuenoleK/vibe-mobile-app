@@ -6,6 +6,9 @@ import { loginApi } from "../api/login-api";
 import { AsyncStorage } from "react-native";
 import { LanguageEnum } from "../enums/LanguageEnum";
 import { apiUtil } from "../utils/ApiUtil";
+import { userApi } from "../api/user-apix";
+import { roleAPi } from "../api/role-api";
+import { initializeTranslation } from "../translation/translation-initializer";
 
 type IUser = UserInterface.IUser;
 type IExtendedUser = ExtendedUserInterface.IExtendedUser;
@@ -63,7 +66,20 @@ class UserStore {
           "Bearer " + (await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY))
       });
     }
-    this.isUserConnected = await this.isConnected();
+    
+    if (user && user.id) {
+      userStore.extendedUser = await userApi.getExtendedUser(userStore.user.id);
+      userStore.userRole = await roleAPi.getRoleByUserAndStructure(
+        userStore.user.id,
+        userStore.extendedUser.currentStructure.id
+        );
+        if (user.langKey) {
+          initializeTranslation(user.langKey);
+        }
+      } else {
+        initializeTranslation();
+      }
+      this.isUserConnected = await this.isConnected();
     return user;
   }
 

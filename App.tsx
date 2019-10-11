@@ -12,7 +12,9 @@ import { observer } from "mobx-react";
 import { themeStore } from "./stores/theme-store";
 import { AsyncStorage } from "react-native";
 import { StorageKeysEnum } from "./enums/StorageKeysEnum";
-import { observable, computed } from "mobx";
+import { observable, computed, toJS } from "mobx";
+import { userApi } from "./api/user-apix";
+import { roleAPi } from "./api/role-api";
 
 initializeTranslation("en");
 
@@ -39,20 +41,30 @@ const darkTheme = {
 
 @observer
 class Layout extends React.Component {
+  @observable
+  canRenderChildren = false;
 
   async componentDidMount() {
-    await userStore.initUserStore();
-    if (await AsyncStorage.getItem(StorageKeysEnum.IS_THEME_DARK) === "true" || themeStore.isDark) {
+    // User managmement
+    userStore.user = await userStore.initUserStore();
+
+    // Theme management
+    if (
+      (await AsyncStorage.getItem(StorageKeysEnum.IS_THEME_DARK)) === "true" ||
+      themeStore.isDark
+    ) {
       themeStore.isDark = true;
     } else {
       themeStore.isDark = false;
     }
+
+    this.canRenderChildren = true;
   }
 
   render() {
     return (
       <PaperProvider theme={this.theme}>
-        <App />
+        {this.canRenderChildren && <App />}
       </PaperProvider>
     );
   }

@@ -1,5 +1,5 @@
-import { RoleEnum } from 'app/enums/RoleEnum';
-import { userStore } from 'app/stores/user-store';
+import { RoleEnum } from "../enums/RoleEnum";
+import { userStore } from "../stores/user-store";
 
 class RoleUtils {
   public canEdit() {

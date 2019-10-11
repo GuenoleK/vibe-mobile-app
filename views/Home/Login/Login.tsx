@@ -65,6 +65,7 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
             value={userStore.user.password}
             secureTextEntry
             autoCapitalize="none"
+            onSubmitEditing={this.login}
           />
           <View style={loginStyle.buttons}>
             <Button

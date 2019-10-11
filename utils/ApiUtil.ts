@@ -1,4 +1,5 @@
 import { AsyncStorage } from "react-native";
+import axios, { AxiosRequestConfig } from "axios";
 
 class ApiUtil {
   AUTH_TOKEN_KEY = "jhi-authenticationToken";
@@ -17,6 +18,18 @@ class ApiUtil {
       Authorization:
         "Bearer " + (await AsyncStorage.getItem(this.AUTH_TOKEN_KEY))
     };
+  }
+
+  callApi(url: string, method: 'get' | 'post', options?: AxiosRequestConfig, data?: object) {
+    const finalUrl = `${this.baseUrl}/${url}`;
+    switch (method) {
+      case 'get':
+        return axios.get(finalUrl, options);
+      case 'post':
+        return axios.post(finalUrl, data, options);
+      default:
+        return;
+    }
   }
 }
 

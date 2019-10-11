@@ -1,0 +1,104 @@
+[data-component='audio-card'] {
+  position: relative;
+  height: 150px;
+  margin-bottom: 30px;
+
+  .audio-card {
+    display: flex;
+
+    .content {
+      width: 100%;
+
+      .card-header {
+        display: flex;
+
+        @media (max-width: 490px) {
+          .information-zone {
+            width: 320px;
+          }
+        }
+
+        .information-zone {
+          padding-top: 8px;
+          overflow: hidden;
+          flex: 0.9;
+        }
+
+        .audio-menu {
+          width: 0px;
+          display: flex;
+          height: 50px;
+        }
+      }
+
+      #upload-updated-audio {
+        width: 0;
+        height: 0;
+        opacity: 0;
+        cursor: default;
+      }
+    }
+
+    .media {
+      width: 145px;
+    }
+
+    .media-button-zone {
+      height: 48px;
+      display: flex;
+      align-items: center;
+
+      .spinner-component {
+        > div {
+          width: 25px !important;
+          height: 25px !important;
+          margin-left: 25px;
+          margin-bottom: 0;
+        }
+      }
+
+      .audio-slider {
+        width: 50%;
+        padding-bottom: 3px;
+        padding-left: 15px;
+
+        .slider {
+          height: 5px;
+          padding: unset;
+
+          .MuiSlider-rail,
+          .MuiSlider-track {
+            height: 3px;
+            border-radius: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .audio-name {
+    text-transform: capitalize;
+  }
+
+  .audio-name,
+  .article-name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .audio-upload-dropzone {
+    position: absolute;
+    bottom: -19px;
+    right: -21px;
+    cursor: pointer;
+
+    > div {
+      outline: none;
+    }
+    .add-audio-button {
+      width: 46px;
+      height: 46px;
+    }
+  }
+}
