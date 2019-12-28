@@ -6,6 +6,10 @@ import { SnackbarTypeEnum } from "../enums/SnackbarEnum";
 import { translationUtil } from "../translation/translation-util";
 import { AsyncStorage } from "react-native";
 import { apiUtil } from "../utils/ApiUtil";
+import { LanguageEnum } from "../enums/LanguageEnum";
+import { userApi } from "./user-api";
+import { roleAPi } from "./role-api";
+import { initializeTranslation } from "../translation/translation-initializer";
 
 type IUser = UserInterface.IUser;
 
@@ -163,6 +167,38 @@ class LoginApi {
         `Error status: ${error.status}, error text: ${error.statusText}`
       );
     }
+  };
+
+  async initUserStore() {
+    let user;
+    if (await userStore.isConnected()) {
+      user = await loginApi.getAccountWithHeaderToken({
+        Authorization:
+          "Bearer " + (await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY))
+      });
+    }
+    
+    if (user && user.id) {
+      userStore.extendedUser = await userApi.getExtendedUser(userStore.user.id);
+      userStore.userRole = await roleAPi.getRoleByUserAndStructure(
+        userStore.user.id,
+        userStore.extendedUser.currentStructure.id
+        );
+        if (user.langKey) {
+          initializeTranslation(user.langKey);
+        }
+      } else {
+        initializeTranslation();
+      }
+      userStore.isUserConnected = await userStore.isConnected();
+    return user;
+  }
+
+  public changeLanguage = async (language: LanguageEnum) => {
+    userStore.user.langKey = language;
+    this.updateUser(userStore.user).then(() => {
+      // window.location.reload();
+    });
   };
 
   public updateUser = async (user: IUser) => {

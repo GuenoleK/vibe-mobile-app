@@ -29,12 +29,10 @@ export class HomeScreen extends React.Component<INavigationProps> {
       container: {
         flex: 1,
         width: "100%",
-        backgroundColor: themeStore.isDark
-          ? BackgroundColorEnum.DARK_GREY
-          : BackgroundColorEnum.WHITE,
-          color: themeStore.isDark
+        backgroundColor: "transparent",
+        color: themeStore.isDark
           ? DarkTheme.colors.text
-          : DefaultTheme.colors.text,
+          : DefaultTheme.colors.text
       }
     });
   }

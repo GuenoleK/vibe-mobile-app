@@ -2,13 +2,7 @@ import React from "react";
 import * as ArticleInterface from "../../../model/article.model";
 import { computed } from "mobx";
 import { Card, Title, Paragraph, Button, Avatar } from "react-native-paper";
-// import { Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@material-ui/core';
-// import { ButtonLink } from 'app/components/button-link/button-link';
-// import { Link } from 'react-router-dom';
-// import './vibe-card.scss';
-// import { computed } from 'mobx';
-// import { translationUtil } from 'app/translation/translation-util';
-// import { Tooltip } from 'react-tippy';
+import { vibeCardStyle } from "./vibe-card-style";
 
 type IArticle = ArticleInterface.IArticle;
 
@@ -19,7 +13,7 @@ interface IVibeCardProps {
 export class VibeCard extends React.Component<IVibeCardProps> {
   render() {
     return (
-      <Card>
+      <Card style={vibeCardStyle.card}>
         <Card.Title
           title="Card Title"
           subtitle="Card Subtitle"

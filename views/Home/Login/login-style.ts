@@ -30,6 +30,7 @@ export const loginStyle = StyleSheet.create({
     marginBottom: 32,
     fontWeight: 'bold',
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: "transparent"
   }
 });

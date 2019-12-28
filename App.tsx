@@ -13,8 +13,8 @@ import { themeStore } from "./stores/theme-store";
 import { AsyncStorage } from "react-native";
 import { StorageKeysEnum } from "./enums/StorageKeysEnum";
 import { observable, computed, toJS } from "mobx";
-import { userApi } from "./api/user-apix";
-import { roleAPi } from "./api/role-api";
+import { loginApi } from "./api/login-api";
+import { BackgroundColorEnum } from "./enums/BackgroundColorEnum";
 
 initializeTranslation("en");
 
@@ -32,10 +32,12 @@ const lightTheme = {
 const darkTheme = {
   ...DarkTheme,
   roundness: 4,
+  isDark: true,
   colors: {
     ...DarkTheme.colors,
     primary: "#3f51b5",
-    text: "#fff"
+    text: "#fff",
+    background: BackgroundColorEnum.DARK_GREY
   }
 };
 
@@ -46,7 +48,7 @@ class Layout extends React.Component {
 
   async componentDidMount() {
     // User managmement
-    userStore.user = await userStore.initUserStore();
+    userStore.user = await loginApi.initUserStore();
 
     // Theme management
     if (

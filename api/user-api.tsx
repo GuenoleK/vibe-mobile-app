@@ -1,4 +1,3 @@
-import axios from "axios";
 import { AsyncStorage } from "react-native";
 import { apiUtil } from "../utils/ApiUtil";
 

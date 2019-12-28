@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { INavigationProps } from "../../../common/INavigationProps";
 import { observable, computed } from "mobx";
 import { observer } from "mobx-react";
@@ -12,6 +12,7 @@ import { translationUtil } from "../../../translation/translation-util";
 import { roleUtils } from "../../../utils/RoleUtils";
 import { IconButton } from "react-native-paper";
 import { EmptyState } from "../../../components/empty-state/empty-state";
+import { articleListStyle } from "./article-list-style";
 
 @observer
 export class ArticleListScreen extends React.Component<INavigationProps> {
@@ -42,7 +43,7 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
 
   render() {
     return (
-      <View>
+      <ScrollView>
         {this.ArticleList}
         {/* {articleStore.articleList.length === 0 && roleUtils.canEdit() && this.ArrowIcon}
         {roleUtils.canEdit() && (
@@ -51,7 +52,7 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
             <CreateArticleDialog isPopinOpen={this.isPopinOpen} closePopin={this.closePopin} routerProps={this.props} />
           </div>
         )} */}
-      </View>
+      </ScrollView>
     );
   }
 
@@ -64,6 +65,7 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
       <EmptyState
         title={translationUtil.translate("articleList.emptyState.title")}
         description={this.DescriptionComponent}
+        style={articleListStyle.container}
         icon={
           // <Icon className="file-icon" />
           <IconButton
