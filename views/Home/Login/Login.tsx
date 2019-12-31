@@ -9,6 +9,7 @@ import { observable } from "mobx";
 import { observer } from "mobx-react";
 import { loginStyle } from "./login-style";
 import { themeStore } from "../../../stores/theme-store";
+import { BackgroundColorEnum } from "../../../enums/BackgroundColorEnum";
 
 @observer
 export class LoginScreen extends React.Component<{ navigation: any }> {
@@ -33,7 +34,14 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={loginStyle.container}>
+      <View
+        style={{
+          ...loginStyle.container,
+          backgroundColor: themeStore.isDark
+            ? BackgroundColorEnum.DARK_GREY
+            : BackgroundColorEnum.WHITE
+        }}
+      >
         <KeyboardAvoidingView behavior="padding" style={loginStyle.form}>
           <Text style={this.titleStyle.title}>
             {translationUtil.translate("home.form.title")}
@@ -122,6 +130,7 @@ export class LoginScreen extends React.Component<{ navigation: any }> {
    */
   login = () => {
     this.isLoading = true;
+    console.log("HELLO");
     loginApi
       .authenticate()
       .then(() => {

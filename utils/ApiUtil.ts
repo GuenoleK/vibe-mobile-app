@@ -8,7 +8,7 @@ class ApiUtil {
 
   private getBaseUrl() {
     if (process.env.NODE_ENV === "development") {
-      return "http://192.168.0.33:8080/api";
+      return "http://192.168.0.34:8080/api";
     }
     return "https://epem-vibe.herokuapp.com/api";
   }
@@ -20,15 +20,18 @@ class ApiUtil {
     };
   }
 
-  callApi(url: string, method: 'get' | 'post', options?: AxiosRequestConfig, data?: object) {
+  callApi(
+    url: string,
+    method: "get" | "post" | "put" | "delete",
+    options?: AxiosRequestConfig,
+    data?: object
+  ) {
     const finalUrl = `${this.baseUrl}/${url}`;
     switch (method) {
-      case 'get':
-        return axios.get(finalUrl, options);
-      case 'post':
+      case "post" || "put":
         return axios.post(finalUrl, data, options);
       default:
-        return;
+        return axios.get(finalUrl, options);
     }
   }
 }

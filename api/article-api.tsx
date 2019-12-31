@@ -2,12 +2,10 @@ import { userStore } from "../stores/user-store";
 import axios from "axios";
 import { snackbarStore } from "../stores/snackbar-store";
 import { SnackbarTypeEnum } from "../enums/SnackbarEnum";
-import * as ArticleInterface from "../model/article.model";
 import { apiUtil } from "../utils/ApiUtil";
 import { translationUtil } from "../translation/translation-util";
 import { AsyncStorage } from "react-native";
-
-type IArticle = ArticleInterface.IArticle;
+import { IArticle } from "../model/article.model";
 
 class ArticleApi {
   /**
@@ -69,7 +67,9 @@ class ArticleApi {
     }
 
     try {
-      const response = await apiUtil.callApi(`articles/${articleId}`, 'get', {headers});
+      const response = await apiUtil.callApi(`articles/${articleId}`, "get", {
+        headers
+      });
       if (response && response.status === 200) {
         return response.data;
       } else if (response && response.status !== 200) {

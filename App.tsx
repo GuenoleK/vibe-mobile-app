@@ -1,26 +1,26 @@
-import React from "react";
-import { createAppContainer } from "react-navigation";
-import { MainNavigator } from "./navigation/navigation";
-import {
-  Provider as PaperProvider,
-  DefaultTheme,
-  DarkTheme
-} from "react-native-paper";
-import { initializeTranslation } from "./translation/translation-initializer";
-import { userStore } from "./stores/user-store";
+import { computed, observable } from "mobx";
 import { observer } from "mobx-react";
-import { themeStore } from "./stores/theme-store";
+import React from "react";
 import { AsyncStorage } from "react-native";
-import { StorageKeysEnum } from "./enums/StorageKeysEnum";
-import { observable, computed, toJS } from "mobx";
+import {
+  DarkTheme,
+  DefaultTheme,
+  Provider as PaperProvider,
+  Theme
+} from "react-native-paper";
+import { createAppContainer } from "react-navigation";
 import { loginApi } from "./api/login-api";
-import { BackgroundColorEnum } from "./enums/BackgroundColorEnum";
+import { StorageKeysEnum } from "./enums/StorageKeysEnum";
+import { MainNavigator } from "./navigation/navigation";
+import { themeStore } from "./stores/theme-store";
+import { userStore } from "./stores/user-store";
+import { initializeTranslation } from "./translation/translation-initializer";
 
 initializeTranslation("en");
 
 const App = createAppContainer(MainNavigator);
 
-const lightTheme = {
+const lightTheme: Theme = {
   ...DefaultTheme,
   roundness: 4,
   colors: {
@@ -29,15 +29,13 @@ const lightTheme = {
   }
 };
 
-const darkTheme = {
+const darkTheme: Theme = {
   ...DarkTheme,
   roundness: 4,
-  isDark: true,
   colors: {
     ...DarkTheme.colors,
     primary: "#3f51b5",
-    text: "#fff",
-    background: BackgroundColorEnum.DARK_GREY
+    text: "#fff"
   }
 };
 

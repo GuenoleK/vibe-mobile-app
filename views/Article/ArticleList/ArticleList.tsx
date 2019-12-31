@@ -1,21 +1,30 @@
-import React from "react";
-import { View, Text, ScrollView } from "react-native";
-import { INavigationProps } from "../../../common/INavigationProps";
-import { observable, computed } from "mobx";
+import { computed, observable } from "mobx";
 import { observer } from "mobx-react";
-import { headerStore } from "../../../stores/header-store";
-import { articleStore } from "../../../stores/article-store";
+import React from "react";
+import { ScrollView, Text } from "react-native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  IconButton,
+  Colors
+} from "react-native-paper";
 import { articleApi } from "../../../api/article-api";
+import { EmptyState } from "../../../components/empty-state/EmptyState";
+import { CardContainer } from "../../../components/layout-components/card-container/CardContainer";
+import { articleStore } from "../../../stores/article-store";
+import { headerStore } from "../../../stores/header-store";
+import { themeStore } from "../../../stores/theme-store";
 import { userStore } from "../../../stores/user-store";
-import { CardContainer } from "../../../components/layout-components/card-container/card-container";
 import { translationUtil } from "../../../translation/translation-util";
 import { roleUtils } from "../../../utils/RoleUtils";
-import { IconButton } from "react-native-paper";
-import { EmptyState } from "../../../components/empty-state/empty-state";
-import { articleListStyle } from "./article-list-style";
+import { NavigationStackProp } from "react-navigation-stack";
+
+type ArticleListScreenProps = {
+  navigation: NavigationStackProp;
+};
 
 @observer
-export class ArticleListScreen extends React.Component<INavigationProps> {
+export class ArticleListScreen extends React.Component<ArticleListScreenProps> {
   @observable
   isPopinOpen = false;
 
@@ -26,7 +35,7 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
   showArrow = false;
 
   componentWillMount() {
-    headerStore.headerTitle = "";
+    headerStore.headerTitle = "Vibe";
   }
 
   async componentDidMount() {
@@ -43,7 +52,13 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+        style={{
+          backgroundColor: themeStore.isDark
+            ? DarkTheme.colors.background
+            : DefaultTheme.colors.background
+        }}
+      >
         {this.ArticleList}
         {/* {articleStore.articleList.length === 0 && roleUtils.canEdit() && this.ArrowIcon}
         {roleUtils.canEdit() && (
@@ -59,20 +74,14 @@ export class ArticleListScreen extends React.Component<INavigationProps> {
   @computed
   get ArticleList() {
     if (articleStore.searchableArticleList.length > 0) {
-      return <CardContainer />;
+      return <CardContainer navigation={this.props.navigation} />;
     }
     return (
       <EmptyState
         title={translationUtil.translate("articleList.emptyState.title")}
         description={this.DescriptionComponent}
-        style={articleListStyle.container}
         icon={
-          // <Icon className="file-icon" />
-          <IconButton
-            icon="assignment"
-            // color={Colors.red500}
-            size={20}
-          />
+          <IconButton icon="clipboard-text" color={Colors.grey200} size={20} />
         }
       />
     );

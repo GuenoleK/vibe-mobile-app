@@ -1,13 +1,9 @@
-import * as UserInterface from "../model/user.model";
-import * as ExtendedUserInterface from "../model/extended-user.model";
-import * as RoleInterface from "../model/role.model";
 import { computed, observable, action, toJS } from "mobx";
 import { AsyncStorage } from "react-native";
 import { apiUtil } from "../utils/ApiUtil";
-
-type IUser = UserInterface.IUser;
-type IExtendedUser = ExtendedUserInterface.IExtendedUser;
-type IRole = RoleInterface.IRole;
+import { IRole } from "../model/role.model";
+import { IExtendedUser } from "../model/extended-user.model";
+import { IUser } from "../model/user.model";
 
 class UserStore {
   @observable
@@ -50,7 +46,7 @@ class UserStore {
   }
 
   async isConnected() {
-    return await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY) ? true : false;
+    return (await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY)) ? true : false;
   }
 
   @action

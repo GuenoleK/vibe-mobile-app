@@ -6,22 +6,24 @@ import { ViewsHeader } from "../views/Header/ViewsHeader";
 import { LoginScreen } from "../views/Home/Login/Login";
 import { headerStore } from "../stores/header-store";
 import { HomeScreen } from "../views/Home/Home";
+import { ArticleDetail } from "../views/Article/ArticleDetail/ArticleDetail";
 
 export const MainNavigator = createStackNavigator(
   {
     Home: {
       screen: HomeScreen,
-      navigationOptions: ({ navigation }) => ({
+      navigationOptions: {
         title: headerStore.headerTitle,
-        header: <Header navigation={navigation} />
-      })
+        header: props => <Header {...props} />
+      }
     },
     Login: { screen: LoginScreen },
+    ArticleDetail: { screen: ArticleDetail },
     Profile: { screen: ProfileScreen }
   },
   {
-    defaultNavigationOptions: ({ navigation }) => ({
-      header: <ViewsHeader navigation={navigation} />
-    })
+    defaultNavigationOptions: {
+      header: props => <ViewsHeader {...props} />
+    }
   }
 );

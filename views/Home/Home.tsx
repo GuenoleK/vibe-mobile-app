@@ -5,13 +5,16 @@ import { userStore } from "../../stores/user-store";
 import { View, StyleSheet } from "react-native";
 import { ArticleListScreen } from "../Article/ArticleList/ArticleList";
 import { LoginScreen } from "./Login/Login";
-import { INavigationProps } from "../../common/INavigationProps";
 import { themeStore } from "../../stores/theme-store";
-import { BackgroundColorEnum } from "../../enums/BackgroundColorEnum";
 import { DarkTheme, DefaultTheme } from "react-native-paper";
+import { NavigationStackProp } from "react-navigation-stack";
+
+interface HomeScreenProps {
+  navigation: NavigationStackProp;
+}
 
 @observer
-export class HomeScreen extends React.Component<INavigationProps> {
+export class HomeScreen extends React.Component<HomeScreenProps> {
   render() {
     return (
       <View style={this.styles.container}>

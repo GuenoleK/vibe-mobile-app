@@ -1,6 +1,6 @@
-import { Moment } from 'moment';
-import { IUser } from 'app/shared/model/user.model';
-import { IStructure } from 'app/shared/model/structure.model';
+import { Moment } from "moment";
+import { IUser } from "app/shared/model/user.model";
+import { IStructure } from "app/shared/model/structure.model";
 
 export interface IArticle {
   id?: number;

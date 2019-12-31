@@ -1,5 +1,4 @@
 import { userStore } from "../stores/user-store";
-import * as UserInterface from "../model/user.model";
 import axios from "axios";
 import { snackbarStore } from "../stores/snackbar-store";
 import { SnackbarTypeEnum } from "../enums/SnackbarEnum";
@@ -10,8 +9,7 @@ import { LanguageEnum } from "../enums/LanguageEnum";
 import { userApi } from "./user-api";
 import { roleAPi } from "./role-api";
 import { initializeTranslation } from "../translation/translation-initializer";
-
-type IUser = UserInterface.IUser;
+import { IUser } from "../model/user.model";
 
 class LoginApi {
   /**
@@ -177,20 +175,20 @@ class LoginApi {
           "Bearer " + (await AsyncStorage.getItem(apiUtil.AUTH_TOKEN_KEY))
       });
     }
-    
+
     if (user && user.id) {
       userStore.extendedUser = await userApi.getExtendedUser(userStore.user.id);
       userStore.userRole = await roleAPi.getRoleByUserAndStructure(
         userStore.user.id,
         userStore.extendedUser.currentStructure.id
-        );
-        if (user.langKey) {
-          initializeTranslation(user.langKey);
-        }
-      } else {
-        initializeTranslation();
+      );
+      if (user.langKey) {
+        initializeTranslation(user.langKey);
       }
-      userStore.isUserConnected = await userStore.isConnected();
+    } else {
+      initializeTranslation();
+    }
+    userStore.isUserConnected = await userStore.isConnected();
     return user;
   }
 
