@@ -7,10 +7,11 @@ class ApiUtil {
   baseUrl = this.getBaseUrl();
 
   private getBaseUrl() {
-    if (process.env.NODE_ENV === "development") {
-      return "http://192.168.0.34:8080/api";
-    }
     return "https://epem-vibe.herokuapp.com/api";
+    // if (process.env.NODE_ENV === "development") {
+    //   return "http://192.168.0.34:8080/api";
+    // }
+    // return "https://epem-vibe.herokuapp.com/api";
   }
 
   async getHeader() {

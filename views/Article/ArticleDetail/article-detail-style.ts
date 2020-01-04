@@ -9,6 +9,7 @@ export const articleDetailStyle = StyleSheet.create({
     flexDirection: "column"
   },
   content: {
-    width: "100%"
+    width: "100%",
+    height: "100%"
   }
 });

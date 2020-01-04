@@ -9,7 +9,7 @@ import { articleMediaStore } from "../../../../stores/article-media-store";
 import { roleUtils } from "../../../../utils/RoleUtils";
 import { articleStore } from "../../../../stores/article-store";
 import { ArticleMediaTypeCodeEnum } from "../../../../enums/ArticleMediaTypeCodeEnum";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, WebView } from "react-native";
 import { EmptyState } from "../../../../components/empty-state/EmptyState";
 
 interface IArticleCardProps {
@@ -42,92 +42,81 @@ export class ArticleCard extends React.Component<IArticleCardProps> {
     }
   });
 
+  styles = StyleSheet.create({
+    container: {
+      height: "80%",
+      margin: 10,
+      backgroundColor: Colors.amber400
+    },
+    cardHeader: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    cardTitle: {
+      flex: 1
+    }
+  });
+
   render() {
     return (
-      <Card>
-        {this.article && (
-          <Card.Content>
-            <Card.Title
-              title={translationUtil.translate(
-                "article.detail.pdfCard.header.title"
-              )}
-              left={props => <Avatar.Icon {...props} icon="playlist-music" />}
-            />
-            {this.pdfMedia && (
-              <View>
-                <Menu
-                  visible={this.isMenuOpen}
-                  onDismiss={this.openMenu}
-                  anchor={
-                    <IconButton onPress={this.openMenu} icon="dots-vertical" />
-                  }
-                >
-                  <Menu.Item onPress={() => {}} title="Item 1" />
-                  <Menu.Item onPress={() => {}} title="Item 2" />
-                  <Menu.Item onPress={() => {}} title="Item 3" />
-                </Menu>
-              </View>
-              //   <div className="card-menu">
-              //     <input
-              //       id="upload-updated-pdf"
-              //       multiple={false}
-              //       type="file"
-              //       accept="application/pdf"
-              //       onChange={this.onChangeLyrics}
-              //     />
-              //     <IconButton
-              //       disabled={
-              //         this.isLoading ||
-              //         this.isLoadingData ||
-              //         articleMediaStore.isAMediaLoading
-              //       }
-              //       className="article-more-button"
-              //       onClick={this.openMenu}
-              //     >
-              //       <MoreVertIcon className="article-more-icon" />
-              //       <Menu
-              //         open={this.isMenuOpen}
-              //         anchorEl={this.menuAnchorElement}
-              //         getContentAnchorEl={null}
-              //         anchorOrigin={{
-              //           vertical: "bottom",
-              //           horizontal: "right"
-              //         }}
-              //         transformOrigin={{
-              //           vertical: "top",
-              //           horizontal: "right"
-              //         }}
-              //       >
-              //         {roleUtils.canEdit() && (
-              //           <MenuItem onClick={this.onChangePdfSelected}>
-              //             {translationUtil.translate(
-              //               "article.detail.pdfCard.header.menu.modify"
-              //             )}
-              //           </MenuItem>
-              //         )}
-              //         {roleUtils.canEdit() && (
-              //           <MenuItem onClick={this.deletePdfFile}>
-              //             {translationUtil.translate(
-              //               "article.detail.pdfCard.header.menu.delete"
-              //             )}
-              //           </MenuItem>
-              //         )}
-              //         <a
-              //           className="menu-option-download download-pdf"
-              //           href={this.pdfFileSrc}
-              //           download={this.pdfMedia.name}
-              //         >
-              //           <MenuItem>
-              //             {translationUtil.translate(
-              //               "article.detail.pdfCard.header.menu.download"
-              //             )}
-              //           </MenuItem>
-              //         </a>
-              //       </Menu>
-              //     </IconButton>
-              //   </div>
+      <Card style={this.styles.container}>
+        <View style={this.styles.cardHeader}>
+          <Card.Title
+            style={this.styles.cardTitle}
+            title={translationUtil.translate(
+              "article.detail.pdfCard.header.title"
             )}
-          </Card.Content>
+            left={props => <Avatar.Icon {...props} icon="playlist-music" />}
+          />
+          <Menu
+            visible={this.isMenuOpen}
+            onDismiss={this.openMenu}
+            anchor={
+              <IconButton
+                disabled={
+                  this.isLoading ||
+                  this.isLoadingData ||
+                  articleMediaStore.isAMediaLoading
+                }
+                onPress={this.openMenu}
+                icon="dots-vertical"
+              />
+            }
+          >
+            {roleUtils.canEdit() && (
+              <Menu.Item
+                onPress={this.onChangePdfSelected}
+                title={translationUtil.translate(
+                  "article.detail.pdfCard.header.menu.modify"
+                )}
+              />
+            )}
+            {roleUtils.canEdit() && (
+              <Menu.Item
+                onPress={this.deletePdfFile}
+                title={translationUtil.translate(
+                  "article.detail.pdfCard.header.menu.delete"
+                )}
+              />
+            )}
+            <Menu.Item
+              onPress={() => {}}
+              title={translationUtil.translate(
+                "article.detail.pdfCard.header.menu.download"
+              )}
+            />
+          </Menu>
+        </View>
+        {this.pdfMedia && (
+          <WebView
+            bounces
+            scrollEnabled
+            source={{
+              uri: `https://drive.google.com/viewerng/viewer?embedded=true&url=${this.pdfFileSrc}`
+            }}
+          />
         )}
       </Card>
     );

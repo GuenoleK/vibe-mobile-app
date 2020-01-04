@@ -95,7 +95,6 @@ export class ArticleDetail extends React.Component<ArticleDetailProps> {
     return (
       <View style={articleDetailStyle.content}>
         <ArticleCard isLoadingData={this.isLoading} />
-        {/* <View><AudioCardList audioList={this.audioList} /></View> */}
       </View>
     );
   }
